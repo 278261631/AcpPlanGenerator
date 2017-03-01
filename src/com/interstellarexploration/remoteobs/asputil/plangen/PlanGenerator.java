@@ -3,11 +3,15 @@ package com.interstellarexploration.remoteobs.asputil.plangen;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
+
+import org.apache.commons.io.FileUtils;
 
 public class PlanGenerator {
 
 	public static final String NewLine = "\r\n";
 
+	
 	public String doGenerate() {
 
 		StringBuffer sb = new StringBuffer();
@@ -102,6 +106,7 @@ public class PlanGenerator {
 		return sb.toString();
 	}
 
+	@Deprecated
 	public void writeToPlan(String str, String filePath) {
 		try {
 			File file = new File(filePath);
@@ -113,6 +118,11 @@ public class PlanGenerator {
 		} catch (IOException ex) {
 			System.out.println(ex.getStackTrace());
 		}
+	}
+	
+	public void writeToPlanFile(String str, String filePath) throws IOException {
+		File file = new File(filePath);
+		FileUtils.writeStringToFile(file, str, Charset.forName("UTF-8"), false);
 	}
 	
 	
@@ -141,17 +151,22 @@ public class PlanGenerator {
 		result+=java.text.MessageFormat.format(p_tab_delimited_format, targetName,Ra,Dec);
 		return result;
 	}
+	
+	public String targetName=null;
 	/**
 	 * 增加Plan 的Target Name  
 	 * @param targetName
 	 * @param Ra
 	 * @param Dec
 	 * @return
+	 * @throws PlanCheckExeption 
 	 */
-	public String generateTargetName(String targetName,Double Ra,Double Dec ){
-		String result="";
-		result+=java.text.MessageFormat.format(p_tab_delimited_format, targetName,Ra,Dec);
-		return result;
+	public void generateTargetName(String targetName,Double Ra,Double Dec ) throws PlanCheckExeption{
+		if (targetName==null||targetName.length()==0) {
+			targetName = java.text.MessageFormat.format(p_tab_delimited_format, targetName,Ra,Dec);
+		}else{
+			throw new PlanCheckExeption("已经有"+targetName);
+		}
 	}
 	
 	/**
