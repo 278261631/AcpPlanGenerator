@@ -1,5 +1,6 @@
 package com.interstellarexploration.remoteobs.asputil.plangen.plantarget;
 
+import com.interstellarexploration.remoteobs.asputil.plangen.PlanCheckExeption;
 import com.interstellarexploration.remoteobs.asputil.plangen.PlanFileContent;
 
 public abstract class PlanTarget {
@@ -15,7 +16,7 @@ public abstract class PlanTarget {
 		this.outString = outString;
 	}
 	
-	public String toString(){
+	public String toOutString() throws PlanCheckExeption {
 		return outString+PlanFileContent.NewLine;
 	}
 	

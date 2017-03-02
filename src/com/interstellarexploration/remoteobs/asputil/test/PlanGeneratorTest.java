@@ -2,11 +2,16 @@ package com.interstellarexploration.remoteobs.asputil.test;
 
 import static org.junit.Assert.*;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import com.interstellarexploration.remoteobs.asputil.plangen.PlanCheckExeption;
 import com.interstellarexploration.remoteobs.asputil.plangen.PlanFileContent;
 import com.interstellarexploration.remoteobs.asputil.plangen.PlanGenerator;
 import com.interstellarexploration.remoteobs.asputil.plangen.plantarget.NormalPlan;
@@ -50,7 +55,7 @@ public class PlanGeneratorTest {
 	}
 	
 	@Test
-	public void testPlanGeneratePlanFile() {
+	public void testPlanGeneratePlanFile()  {
 		
 			Random ra=new Random();
 		
@@ -60,17 +65,54 @@ public class PlanGeneratorTest {
 			planFile.getTargetList().add(new PlanBIAS());
 			planFile.getTargetList().add(new PlanDOMECLOSE());
 			NormalPlan planA=new NormalPlan(TestUtil.random(10),ra.nextDouble()*10,ra.nextDouble()*10);
-			planA.setNextTar_AUTOFOCUS("xx");
+			planA.setNextTar_AUTOFOCUS();
+			String[] filterNames={"red","blue","green",};
+			int[] count_array={1,2,3};
+			int[] count_Binning={1,2,3};
+			int[] countInterval={1,2,3};
+			planA.setSubSequenTar_FILTER(filterNames);
+			planA.setSubSequenTar_COUNT(count_array);
+			planA.setSubSequenTar_BINNING(count_Binning);
+			planA.setSubSequenTar_INTERVAL(countInterval);
 			NormalPlan planB=new NormalPlan(TestUtil.random(10),ra.nextDouble()*10,ra.nextDouble()*10);
-			planB.setSubSequenTar_INTERVAL("2");
+			planB.setSubSequenTar_FILTER(new String[]{"RED","CLEAR"});
+			planB.setSubSequenTar_INTERVAL(new int []{1,2});
+			planB.setSubSequenTar_COUNT(new int[]{2,3});
+			planB.setSubSequenTar_BINNING(new int []{3,4});
 			planFile.getTargetList().add(planA);
 			planFile.getTargetList().add(planB);
 			
 			planFile.setPlan_sets(3);
 			
-			System.out.println(planFile.toString());
+			try {
+				System.out.println(planFile.toOutString());
+			} catch (PlanCheckExeption e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		
 		
+	}
+	
+	@Test
+	public void test() {
+//		Object [] count={1,2,3,4};
+//		String format= "#Count {0},{1},{2},{3}";
+//		List<Integer> countList=new ArrayList();
+//		countList.add(1);
+//		countList.add(1);
+//		countList.add(1);
+//		countList.add(1);
+//		System.out.println( java.text.MessageFormat.format(format, countList));
+//		System.out.println( java.text.MessageFormat.format(format, count));
+//		
+//		
+//        String message = "Once upon a time ({1,date}, around about {1,time,short}), there "  
+//                + "was a humble developer named Geppetto who slaved for "  
+//                + "{0,number,integer} days with {2,number,percent} complete user " + "requirements.{3}{4}{5}{6} ";  
+//        Object[] variables = new Object[] { new Integer(4), new Date(), new Double(0.21) };  
+//        String output = MessageFormat.format(message, variables);  
+//        System.out.println(output);
 	}
 
 }

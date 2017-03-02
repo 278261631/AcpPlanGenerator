@@ -111,7 +111,7 @@ public class PlanFileContent {
 	private List<String> paln_ChainSript=new ArrayList<>();
 
 	public static final String NewLine = "\r\n";
-	public String toString(){
+	public String toOutString() throws PlanCheckExeption{
 		StringBuilder resultSB=new StringBuilder();
 		if(getPlan_sets()!=null && getPlan_sets().length()>0)resultSB.append(getPlan_sets()).append(NewLine);
 		if(getPlan_afinterval()!=null && getPlan_afinterval().length()>0)resultSB.append(getPlan_afinterval()).append(NewLine);
@@ -124,7 +124,7 @@ public class PlanFileContent {
 		
 		if (getTargetList().size()>0) {
 			for (PlanTarget planTargetItem : getTargetList()) {
-				resultSB.append(planTargetItem.toString());
+				resultSB.append(planTargetItem.toOutString());
 			}
 		}
 		
