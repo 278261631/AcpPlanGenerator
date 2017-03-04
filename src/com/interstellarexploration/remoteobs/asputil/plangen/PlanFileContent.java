@@ -6,7 +6,9 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.LogManager;
 
 import com.interstellarexploration.remoteobs.asputil.plangen.plantarget.PlanTarget;
 
@@ -144,15 +146,19 @@ public class PlanFileContent {
 		return resultSB.toString();
 	}
 	
-	public String toFile(String filePath) throws IOException{
-		
+	
+	public void toFile(String filePath) throws IOException, PlanCheckExeption{
+		if (!filePath.endsWith(".txt")) {
+			filePath+=".txt";
+		}
 		File file = new File(filePath);
-		FileUtils.writeStringToFile(file, toString(), Charset.forName("UTF-8"), false);
+		FileUtils.writeStringToFile(file, toOutString(), Charset.forName("UTF-8"), false);
 //		FileUtils.writeLines(file, lines, lineEnding);;
 		
+		LogManager.getLogger("").debug(file.getName()+"-"+file.getPath());
 //		File file = new File(filePath);
 //		FileUtils.writeStringToFile(file, str, Charset.forName("UTF-8"), false);
-		return "";
+//		return "";
 	}
 	
 }

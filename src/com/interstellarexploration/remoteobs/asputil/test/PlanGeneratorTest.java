@@ -2,12 +2,14 @@ package com.interstellarexploration.remoteobs.asputil.test;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import org.apache.logging.log4j.LogManager;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -94,6 +96,82 @@ public class PlanGeneratorTest {
 		
 	}
 	
+	
+	@Test
+	public void testPlanGeneratePlanToFile()  {
+		
+			int loopcount=5;
+			String FilePath="d:/hello/planTest_";
+			
+			for (int i = 0; i < loopcount; i++) {
+				Random ra = new Random();
+				PlanFileContent planFile = new PlanFileContent();
+				planFile.getTargetList().add(new PlanDOMEOPEN());
+				planFile.getTargetList().add(new PlanDARK());
+				planFile.getTargetList().add(new PlanBIAS());
+				planFile.getTargetList().add(new PlanDOMECLOSE());
+				NormalPlan planA = new NormalPlan(TestUtil.random(10), ra.nextDouble() * 10, ra.nextDouble() * 10);
+				planA.setNextTar_AUTOFOCUS();
+				String[] filterNames = { "red", "blue", "green", };
+				int[] count_array = { 1, 2, 3 };
+				int[] count_Binning = { 1, 2, 3 };
+				int[] countInterval = { 1, 2, 3 };
+				planA.setSubSequenTar_FILTER(filterNames);
+				planA.setSubSequenTar_COUNT(count_array);
+				planA.setSubSequenTar_BINNING(count_Binning);
+				planA.setSubSequenTar_INTERVAL(countInterval);
+				NormalPlan planB = new NormalPlan(TestUtil.random(10), ra.nextDouble() * 10, ra.nextDouble() * 10);
+				planB.setSubSequenTar_FILTER(new String[] { "RED", "CLEAR" });
+				planB.setSubSequenTar_INTERVAL(new int[] { 1, 2 });
+				planB.setSubSequenTar_COUNT(new int[] { 2, 3 });
+				planB.setSubSequenTar_BINNING(new int[] { 3, 4 });
+				planFile.getTargetList().add(planA);
+				planFile.getTargetList().add(planB);
+				planFile.setPlan_sets(3);
+				try {
+					planFile.toFile(FilePath+i);
+//					System.out.println(planFile.toOutString());
+
+				} catch (PlanCheckExeption e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			}
+		
+		
+	}
+	
+	
+	@Test
+	public void testPlanGeneratePlanToFile_M42()  {
+		
+		int loopcount=5;
+		String FilePath="d:/hello/planTest_";
+		
+		for (int i = 0; i < loopcount; i++) {
+			Random ra = new Random();
+			PlanFileContent planFile = new PlanFileContent();
+			NormalPlan planA = new NormalPlan("M 42", 1,new int[]{1,2},new int[]{1,2},new int[]{1,2});
+			planFile.getTargetList().add(planA);
+			try {
+				planFile.toFile(FilePath+i);
+//					System.out.println(planFile.toOutString());
+				
+			} catch (PlanCheckExeption e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} 
+		}
+		
+		
+	}
+	
 	@Test
 	public void test() {
 //		Object [] count={1,2,3,4};
@@ -113,6 +191,20 @@ public class PlanGeneratorTest {
 //        Object[] variables = new Object[] { new Integer(4), new Date(), new Double(0.21) };  
 //        String output = MessageFormat.format(message, variables);  
 //        System.out.println(output);
+		
+		boolean isX;
+//		testBoolean(isX);
+//		PropertyConfigurator.configure("log4j.property");
+		LogManager.getLogger(this.getClass()).error("__");
+		LogManager.getLogger(this.getClass()).debug("__");
 	}
-
+	
+	public void testBoolean(boolean isX){
+		if (isX) {
+			System.out.println("xxx");
+		}
+		System.out.println("yyy");
+		
+		
+	}
 }

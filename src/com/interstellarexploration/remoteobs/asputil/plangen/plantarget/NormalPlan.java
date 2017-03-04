@@ -12,9 +12,13 @@ import com.interstellarexploration.remoteobs.asputil.plangen.PlanFileContent;
 
 public class NormalPlan extends PlanTarget {
 	
-	public NormalPlan(String targetName) {
+	public NormalPlan(String targetName, int repeat,int[]count,int [] interval,int [] binning) {
 		this.targetName=targetName;
-		
+		setNextTar_REPEAT(repeat);
+		setSubSequenTar_COUNT(count);
+		setSubSequenTar_INTERVAL(interval);
+		setSubSequenTar_BINNING(binning);
+
 	}
 	
 	public NormalPlan(String targetName,double ra,double dec) {
@@ -35,16 +39,24 @@ public class NormalPlan extends PlanTarget {
 	private int [] countBinning;
 	public boolean isPlanCheckPass() throws  PlanCheckExeption{
 		if (countArray==null || countInterval == null 
-			||countFilter ==null || countBinning ==null){
-			throw new PlanCheckExeption("需要设置 Count Interval Filter Binning 并且数量应该一致");
+			 || countBinning ==null){
+			throw new PlanCheckExeption("需要设置 Count Interval  Binning 并且数量应该一致");
 		}
 		
-		if (countArray.length==countInterval.length
-				&&countInterval.length==countFilter.length
-				&&countFilter.length==countBinning.length) {
-			return true;
+		if (countArray.length==countInterval.length &&countInterval.length==countBinning.length ) {
+			if (countFilter==null) {
+			  return true;	
+			}else {
+				if (countArray.length==countFilter.length) {
+					return true;
+				}else {
+					throw new PlanCheckExeption("需要设置 Count Interval  Binning Filter 并且数量应该一致");
+				}
+			}
+			
+		}else {
+			throw new PlanCheckExeption("需要设置 Count Interval  Binning 并且数量应该一致");
 		}
-		return false;
 	}
 	
 	public void setSubSequenTar_COUNT(int [] count_array) {
@@ -53,7 +65,7 @@ public class NormalPlan extends PlanTarget {
 			if (i!=0) {
 				format+=",";
 			}
-			format+= i;
+			format+= count_array[i];
 		}
 		this.countArray=count_array;
 		this.subSequenTar_COUNT = format;
@@ -135,8 +147,8 @@ public class NormalPlan extends PlanTarget {
 
 
 
-	public void setSubSequenTar_SUBFRAME(String subSequenTar_SUBFRAME) {
-		this.subSequenTar_SUBFRAME = subSequenTar_SUBFRAME;
+	public void setSubSequenTar_SUBFRAME(double subframe) {
+		this.subSequenTar_SUBFRAME = "#SUBFRAME " + subframe;
 	}
 
 
@@ -149,8 +161,8 @@ public class NormalPlan extends PlanTarget {
 
 
 
-	public void setSubSequenTar_POSANG(String subSequenTar_POSANG) {
-		this.subSequenTar_POSANG = subSequenTar_POSANG;
+	public void setSubSequenTar_POSANG(double posAngle) {
+		this.subSequenTar_POSANG = "#POSANG " + posAngle;
 	}
 
 
@@ -163,8 +175,12 @@ public class NormalPlan extends PlanTarget {
 
 
 
-	public void setSubSequenTar_DITHER(String subSequenTar_DITHER) {
-		this.subSequenTar_DITHER = subSequenTar_DITHER;
+	public void setSubSequenTar_DITHER(double dither , boolean isAuto) {
+		if (isAuto ) {
+			this.subSequenTar_DITHER = "#DITHER    " ;
+		}else {
+			this.subSequenTar_DITHER = "#DITHER " + dither;
+		}
 	}
 
 
@@ -178,7 +194,7 @@ public class NormalPlan extends PlanTarget {
 
 
 	public void setSubSequenTar_DIR(String subSequenTar_DIR) {
-		this.subSequenTar_DIR = subSequenTar_DIR;
+		this.subSequenTar_DIR = "#DIR " + subSequenTar_DIR;
 	}
 
 
@@ -191,8 +207,8 @@ public class NormalPlan extends PlanTarget {
 
 
 
-	public void setSubSequenTar_TRACKON(String subSequenTar_TRACKON) {
-		this.subSequenTar_TRACKON = subSequenTar_TRACKON;
+	public void setSubSequenTar_TRACKON() {
+		this.subSequenTar_TRACKON = "#TRACKON ";
 	}
 
 
@@ -205,8 +221,8 @@ public class NormalPlan extends PlanTarget {
 
 
 
-	public void setSubSequenTar_TRACKOFF(String subSequenTar_TRACKOFF) {
-		this.subSequenTar_TRACKOFF = subSequenTar_TRACKOFF;
+	public void setSubSequenTar_TRACKOFF() {
+		this.subSequenTar_TRACKOFF = "#TRACKOFF";
 	}
 
 
@@ -345,11 +361,9 @@ public class NormalPlan extends PlanTarget {
 
 
 
-	public void setNextTar_WAITZENDIST(String nextTar_WAITZENDIST) {
-		
-		//TO-DO  停到这里了
-		
-		this.nextTar_WAITZENDIST = nextTar_WAITZENDIST;
+	public void setNextTar_WAITZENDIST(double deg,int waitMinutes) {
+				
+		this.nextTar_WAITZENDIST = "#WAITZENDIST " +deg + "," + waitMinutes ;
 	}
 
 
@@ -362,8 +376,8 @@ public class NormalPlan extends PlanTarget {
 
 
 
-	public void setNextTar_WAITAIRMASS(String nextTar_WAITAIRMASS) {
-		this.nextTar_WAITAIRMASS = nextTar_WAITAIRMASS;
+	public void setNextTar_WAITAIRMASS(double airMass,int waitMinutes) {
+		this.nextTar_WAITAIRMASS = "#WAITAIRMASS " + airMass + "," + waitMinutes;
 	}
 
 
@@ -375,9 +389,14 @@ public class NormalPlan extends PlanTarget {
 
 
 
-
-	public void setNextTar_TAG(String nextTar_TAG) {
-		this.nextTar_TAG = nextTar_TAG;
+	/**
+	 * #TAG type=reference star
+	 * #TAG typeName=XXXX
+	 * @param nextTar_TAG
+	 */
+	public void setNextTar_TAG(String tagName,String tagValue) {
+		
+		this.nextTar_TAG = "#TAG" + tagName + "=" + tagValue;
 	}
 
 
