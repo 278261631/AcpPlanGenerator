@@ -28,7 +28,7 @@ public class AmqSender {
     Connection connection = null;
     Session session; 
     Destination destination;
-    // MessageProducer：消息发送者
+    // MessageProducer锛氭秷鎭彂閫佽��
     MessageProducer producer; //
     TextMessage message = null;
 	public AmqSender() throws ConfigurationException, JMSException {
@@ -36,7 +36,7 @@ public class AmqSender {
     	Configuration config = null;
     
 	    config = configs.properties(new File("acpconfig.properties"));
-	    AMQUrl = config.getString("amqUrl","tcp://192.168.1.104:61616");
+	    AMQUrl = config.getString("amqUrl","tcp://127.0.0.1:61616");
 	    amqName = config.getString("amqName","loginTopic");
 	    amqLoginPass = config.getString("amqLoginPass");
 	    amqLoginUser = config.getString("amqLoginUser");
