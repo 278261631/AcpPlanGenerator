@@ -155,7 +155,7 @@ public class PlanFileContent {
 		FileUtils.writeStringToFile(file, toOutString(), Charset.forName("UTF-8"), false);
 //		FileUtils.writeLines(file, lines, lineEnding);;
 		
-		LogManager.getLogger("").debug(file.getName()+"-"+file.getPath());
+		LogManager.getLogger().debug(file.getName()+"-"+file.getPath());
 //		File file = new File(filePath);
 //		FileUtils.writeStringToFile(file, str, Charset.forName("UTF-8"), false);
 //		return "";

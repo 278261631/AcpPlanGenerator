@@ -1,4 +1,4 @@
-package com.interstellarexploration.remoteobs.asputil.test;
+package com.interstellarexploration.remoteobs.asputil.test.gen;
 
 import java.util.concurrent.ThreadLocalRandom;
 

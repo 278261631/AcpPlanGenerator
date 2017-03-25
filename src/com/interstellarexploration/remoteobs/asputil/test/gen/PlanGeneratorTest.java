@@ -1,4 +1,4 @@
-package com.interstellarexploration.remoteobs.asputil.test;
+package com.interstellarexploration.remoteobs.asputil.test.gen;
 
 import static org.junit.Assert.*;
 
