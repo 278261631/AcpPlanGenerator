@@ -18,6 +18,7 @@ import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.configuration2.builder.fluent.Configurations;
 import org.apache.commons.configuration2.ex.ConfigurationException;
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import com.interstellarexploration.remoteobs.asputil.planexec.AcpControl;
@@ -68,6 +69,7 @@ public class AmqReceiver {
 	                if (null != message) {
 	                	
 	                	if (message instanceof TextMessage ) {
+	                		Logger.getLogger("").debug("--------接收到消息-------"+ message);	
 	                		String textMessage=((TextMessage) message).getText();
 	                		LogManager.getLogger().debug(textMessage);
 	                		String filePath="C:/planb.txt";
@@ -76,8 +78,9 @@ public class AmqReceiver {
 	                		}
 	                		File file = new File(filePath);
 	                		FileUtils.writeStringToFile(file, textMessage, Charset.forName("UTF-8"), false);
-	                		
+
 	                		LogManager.getLogger().debug(file.getName()+"-"+file.getPath());
+	                		Logger.getLogger("").debug("--------执行-------" + filePath );	
 	                		AcpControl.runPlan(filePath,acpUrl,acpUser,acpPass);
 						}
 	                } else {
